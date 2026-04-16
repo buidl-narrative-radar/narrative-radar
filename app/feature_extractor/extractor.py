@@ -23,7 +23,6 @@ def preprocess_text(text : str) -> str:
     - URL 제거
     - 공백 정리
     - 앞뒤 공백 제거
-    - 이모지 제거
     """
     if not isinstance(text, str):
         return " "
@@ -32,7 +31,6 @@ def preprocess_text(text : str) -> str:
 
     text = re.sub(r"\s+", " ", text).strip()
 
-    text = re.sub(r"[^\x00-\x7F]+", "", text)
 
     return text
 
@@ -139,8 +137,8 @@ def infer_mock_features(clean_text: str, aux_tags: List[str]) -> Dict[str, Any]:
         mood_score -= 0.45
 
     if "event" in aux_tags:
-        mood_score += 0.15
-        play_probs["event_front_run"] += 0.35
+        mood_score += 0.20
+        play_probs["event_front_run"] += 0.55
         risk_scores["execution"] += 0.20
 
     if "promo" in aux_tags:

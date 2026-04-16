@@ -100,7 +100,7 @@ def classify_playbook(play : Dict[str, float]) -> str:
     best = max(play, key=play.get)
     best_val = play.get(best, 0.0)
 
-    if best_val < 0.4:
+    if best_val < 0.3:
         return "불확실"
 
     mapping = {
@@ -115,16 +115,16 @@ def classify_playbook(play : Dict[str, float]) -> str:
 def classify_risk(risk : Dict[str, float]) -> List[str]:
     flags = []
 
-    if risk.get("liquidity", 0) > 0.65:
+    if risk.get("liquidity", 0) > 0.30:
         flags.append("유동성")
 
-    if risk.get("point_competition", 0) > 0.60:
+    if risk.get("point_competition", 0) > 0.30:
         flags.append("포인트 경쟁")
 
-    if risk.get("security", 0) > 0.60:
+    if risk.get("security", 0) > 0.30:
         flags.append("보안")
 
-    if risk.get("execution", 0) > 0.50:
+    if risk.get("execution", 0) > 0.25:
         flags.append("실행 리스크")
 
     return flags
