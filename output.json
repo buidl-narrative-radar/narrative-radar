@@ -1,0 +1,84 @@
+[
+  {
+    "asset_key": "bsc:BNB",
+    "symbol": "BNB",
+    "mood_label": "조심스러운 낙관",
+    "playbook_label": "이벤트 선점",
+    "risk_flags": [
+      "유동성",
+      "포인트 경쟁",
+      "실행 리스크"
+    ],
+    "summary": "BNB positioning balances cautious optimism with a clear bias toward event front-running, though nearly a quarter remains on the sidelines waiting. Elevated execution and liquidity risks heighten the cost of premature moves, keeping conviction moderate and underscoring the competitive tension around key entry points.",
+    "confidence_score": 0.5,
+    "confidence_label": "Medium"
+  },
+  {
+    "asset_key": "bsc:CAKE",
+    "symbol": "CAKE",
+    "mood_label": "조심스러운 낙관",
+    "playbook_label": "대기",
+    "risk_flags": [
+      "유동성",
+      "실행 리스크"
+    ],
+    "summary": "CAKE exhibits cautious optimism with a notable split between waiting and front-running strategies, indicating hesitation to commit fully amid uncertain momentum. Elevated execution and liquidity risks keep conviction fragile, raising the cost of being early in this environment.",
+    "confidence_score": 0.421,
+    "confidence_label": "Low"
+  },
+  {
+    "asset_key": "bsc:LISTA",
+    "symbol": "LISTA",
+    "mood_label": "조심스러운 낙관",
+    "playbook_label": "이벤트 선점",
+    "risk_flags": [
+      "유동성",
+      "포인트 경쟁",
+      "실행 리스크"
+    ],
+    "summary": "A cautious tilt toward event front-running dominates LISTA positioning, though a notable portion remains on the sidelines, creating a delicate balance between anticipation and restraint. Elevated execution and liquidity risks keep conviction fragile, raising the cost of premature moves amid competitive point dynamics.",
+    "confidence_score": 0.507,
+    "confidence_label": "Medium"
+  },
+  {
+    "asset_key": "bsc:THE",
+    "symbol": "THE",
+    "mood_label": "조심스러운 낙관",
+    "playbook_label": "이벤트 선점",
+    "risk_flags": [
+      "유동성",
+      "실행 리스크"
+    ],
+    "summary": "A cautious optimism drives a notable tilt toward event front-running, though a significant portion remains on the sidelines or engages in small repeat trades, reflecting hesitation. Elevated execution and liquidity risks keep conviction fragile, raising the cost of being early in THE.",
+    "confidence_score": 0.449,
+    "confidence_label": "Low"
+  },
+  {
+    "asset_key": "bsc:BANANA",
+    "symbol": "BANANA",
+    "mood_label": "조심스러운 낙관",
+    "playbook_label": "이벤트 선점",
+    "risk_flags": [
+      "유동성",
+      "포인트 경쟁",
+      "실행 리스크"
+    ],
+    "summary": "BANANA’s positioning leans toward event front-running but is tempered by a substantial wait component, reflecting cautious optimism amid competing incentives. Elevated liquidity and execution risks raise the cost of early moves, leaving conviction moderate and sensitive to missteps.",
+    "confidence_score": 0.405,
+    "confidence_label": "Low"
+  },
+  {
+    "asset_key": "bsc:KOMA",
+    "symbol": "KOMA",
+    "mood_label": "조심스러운 낙관",
+    "playbook_label": "이벤트 선점",
+    "risk_flags": [
+      "유동성",
+      "포인트 경쟁",
+      "실행 리스크"
+    ],
+    "summary": "KOMA exhibits a cautious optimism with a clear tilt toward event front-running, though a notable portion remains on the sidelines, balancing between acting early and waiting. Elevated execution and liquidity risks keep conviction fragile, raising the cost of missteps amid competitive positioning.",
+    "confidence_score": 0.542,
+    "confidence_label": "Medium"
+  }
+]
