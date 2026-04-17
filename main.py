@@ -24,11 +24,9 @@ def extract_all_features(docs: List[Dict[str, Any]], mode: str = "llm") -> List[
     for doc in docs:
         feature = extract_features(doc, mode=mode)
 
-        # 평가용 label metadata 유지
         if "_labels" in doc:
             feature["_labels"] = doc["_labels"]
 
-        # 가중치 계산용 engagement 유지
         if "engagement" in doc:
             feature["engagement"] = doc["engagement"]
 
@@ -67,83 +65,73 @@ def to_confidence_label(score: float) -> str:
     return "Low"
 
 
-def main() -> None:
-    # 1) mock md 문서 로드
+def state_to_frontend_payload(state: Dict[str, Any]) -> Dict[str, Any]:
+    asset_key = state["asset_key"]
+    symbol = asset_key.split(":")[-1] if ":" in asset_key else asset_key
+
+    try:
+        summary = generate_asset_summary(state)
+    except Exception:
+        summary = render_template(state)
+
+    return {
+        "asset_key": asset_key,
+        "symbol": symbol,
+        "mood_label": state["mood_label"],
+        "playbook_label": state["playbook_label"],
+        "risk_flags": state["risk_flags"],
+        "summary": summary,
+        "confidence_score": state["confidence"],
+        "confidence_label": to_confidence_label(state["confidence"]),
+    }
+
+
+def run_pipeline(mode: str = "llm") -> List[Dict[str, Any]]:
+    """
+    전체 60개 mock docs를 돌려 frontend-ready output 리스트 반환
+    """
     file_path = "mock_data/moltbook_mock_docs.md"
     docs = load_mock_docs_from_md(file_path)
 
-    print("=== NORMALIZED DOCS (d_i) ===")
-    print(f"loaded docs: {len(docs)}")
-    for doc in docs[:3]:
-        print(doc)
-    print()
-
-    # 2) extractor 실행
-    features = extract_all_features(docs, mode="llm")
-
-    print("=== EXTRACTED FEATURES ===")
-    for feature in features[:3]:
-        print(feature)
-    print()
-
-    # 3) 문서 단위 평가
-    evaluation_results = [evaluate_feature(feature) for feature in features]
-
-    print("=== DOCUMENT-LEVEL EVALUATION ===")
-    print_evaluation_report(evaluation_results)
-    print()
-
-    # 4) asset_key 기준 grouping
+    features = extract_all_features(docs, mode=mode)
     grouped_features = group_features_by_asset(features)
-
-    print("=== GROUPED FEATURES ===")
-    for asset_key, asset_features in grouped_features.items():
-        print(f"{asset_key}: {len(asset_features)} docs")
-    print()
-
-    # 5) asset별 최종 상태 계산
     asset_states = build_all_asset_states(grouped_features)
 
-    print("=== FINAL ASSET STATES ===")
-    for state in asset_states:
-        print(state)
-    print()
+    output = [state_to_frontend_payload(state) for state in asset_states]
+    return output
 
-    # 6) 출력용 summary 생성 + 프런트용 JSON 변환
-    print("=== OUTPUT SUMMARIES ===")
 
-    output: List[Dict[str, Any]] = []
+def run_single_asset_pipeline(symbol: str, mode: str = "llm") -> Dict[str, Any]:
+    """
+    symbol 하나만 처리해서 frontend-ready payload 반환
+    예: BNB, CAKE, LISTA
+    """
+    symbol = symbol.upper().strip()
+    target_asset_key = f"bsc:{symbol}"
 
-    for state in asset_states:
-        asset_key = state["asset_key"]
-        symbol = asset_key.split(":")[-1] if ":" in asset_key else asset_key
+    file_path = "mock_data/moltbook_mock_docs.md"
+    docs = load_mock_docs_from_md(file_path)
 
-        try:
-            summary = generate_asset_summary(state)
-        except Exception as e:
-            print(f"⚠️ output LLM failed for {asset_key}: {e}")
-            summary = render_template(state)
+    filtered_docs = [doc for doc in docs if doc.get("asset_key") == target_asset_key]
 
-        print(f"[{asset_key}]")
-        print(summary)
-        print()
+    if not filtered_docs:
+        raise ValueError(f"Asset not found: {symbol}")
 
-        output.append(
-            {
-                "asset_key": asset_key,  # ex) bsc:BNB
-                "symbol": symbol,  # ex) BNB
-                "mood_label": state["mood_label"],
-                "playbook_label": state["playbook_label"],
-                "risk_flags": state["risk_flags"],
-                "summary": summary,
-                "confidence_score": state["confidence"],
-                "confidence_label": to_confidence_label(state["confidence"]),
-            }
-        )
+    features = extract_all_features(filtered_docs, mode=mode)
+    asset_state = build_asset_state(target_asset_key, features)
 
-    # 7) JSON 파일 저장
+    return state_to_frontend_payload(asset_state)
+
+
+def main() -> None:
+    docs_output = run_pipeline(mode="llm")
+
+    print("=== OUTPUT ===")
+    for item in docs_output:
+        print(item)
+
     with open("output.json", "w", encoding="utf-8") as f:
-        json.dump(output, f, indent=2, ensure_ascii=False)
+        json.dump(docs_output, f, indent=2, ensure_ascii=False)
 
     print("✅ output.json saved")
 
